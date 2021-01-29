@@ -1,0 +1,23 @@
+[package]
+name = "ejdb2"
+version = "0.1.0"
+authors = ["Joylei <leingliu@gmail.com>"]
+edition = "2018"
+
+[workspace]
+members = [".", "ejdb2-sys"]
+
+[dependencies]
+ejdb2-sys = { path = "ejdb2-sys", version = "0.1" }
+bitflags = "1.2"
+rand = "*"
+libc = "*"
+
+[profile.test]
+debug = 1
+opt-level = 0
+
+[features]
+default = ["std"]
+std = []
+alloc = []
