@@ -10,11 +10,10 @@ Cargo.toml
 ejdb2={git=https://github.com/Joylei/ejdb2-rs.git}
 ```
 
-## how to build
+## How to build
 
-please refer to [Readme.md](./ejdb2-rs-sys/Readme.md) for details.
-```
-
+Please refer to [Readme.md](./ejdb2-rs-sys/Readme.md) for details.
 
 ## License
+
 MIT
