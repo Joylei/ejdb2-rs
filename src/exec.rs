@@ -16,12 +16,14 @@ use std::{collections::HashMap, hash::Hash};
 
 use ejdb2_sys as sys;
 
+pub type Explain = fn(&XString);
+
 pub struct Query<'a> {
     db: &'a Database,
     jql: JQL,
     skip: Option<usize>,
     limit: Option<usize>,
-    log: Option<UnsafeCell<Box<dyn FnMut(&XString)>>>,
+    log: Option<UnsafeCell<Explain>>,
 }
 
 impl<'a> Query<'a> {
@@ -56,8 +58,8 @@ impl<'a> Query<'a> {
 
     /// log query plan
     #[inline(always)]
-    pub fn log<F: FnMut(&XString) + 'static>(mut self, f: F) -> Self {
-        self.log = Some(UnsafeCell::new(Box::new(f)));
+    pub fn log(mut self, f: Explain) -> Self {
+        self.log = Some(UnsafeCell::new(f));
         self
     }
     /// exec query and return matched count

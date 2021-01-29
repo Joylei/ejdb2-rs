@@ -16,6 +16,20 @@ Please see test cases for usage details.
 
 Please refer to [README.md](./ejdb2-sys/README.md#build) for details.
 
+## no-std
+
+Turn off default features:
+```toml
+[dependencies]
+ejdb2={git=https://github.com/Joylei/ejdb2-rs.git, default-features = false}
+```
+
+or with `alloc` feature:
+```toml
+[dependencies]
+ejdb2={git=https://github.com/Joylei/ejdb2-rs.git, default-features = false, features=["alloc"]}
+```
+
 ## License
 
 MIT
