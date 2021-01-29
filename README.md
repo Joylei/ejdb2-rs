@@ -14,7 +14,7 @@ Please see test cases for usage details.
 
 ## Build
 
-Please refer to [README.md](./ejdb2-rs-sys/README.md#build) for details.
+Please refer to [README.md](./ejdb2-sys/README.md#build) for details.
 
 ## License
 
