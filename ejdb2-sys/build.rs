@@ -244,7 +244,7 @@ fn gen_binding(dst: &PathBuf) -> Result<()> {
         .with_context(|| "Couldn't write bindings!")
 }
 
-/// check if static build in order:
+/// check if static build in the order of:
 /// EJDB2_STATIC, EJDB2_DYNAMIC, rustflags: +crt-static
 fn check_static() -> bool {
     if let Some(v) = get_env_bool("EJDB2_STATIC") {

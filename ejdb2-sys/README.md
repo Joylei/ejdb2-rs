@@ -1,14 +1,15 @@
 # ejdb2-sys
-ejdb2 rust binding
+Native bindings for [EJDB 2.0](https://github.com/Softmotions/ejdb)
 
 
-## How to use
+## Usage
+
 ```toml
 [dependencies]
-ejdb2-sys={git="http://github.com/wowin/ejdb2-rs.git", path="ejdb2-rs-sys"}
+ejdb2-sys={git="http://github.com/wowin/ejdb2-rs.git", path="ejdb2-sys"}
 ```
 
-## How to build
+## Build
 
 works on windows (requires msys2) & non-windows platform.
 
@@ -21,8 +22,8 @@ if ENV `EJDB2_INSTALL_PATH` was specified, will build with pre-build ejdb2 binar
 if ENV `EJDB2_SOURCE` was specified, will build ejdb2 from source.
 
 ### Non-Windows
-
- Nothing to special, just specify one of two ENV variables: `EJDB2_INSTALL_PATH`  and `EJDB2_SOURCE`.
+To build the library, you need to have cmake installed along with gcc and clang.
+And specify one of two ENV variables: `EJDB2_INSTALL_PATH`  and `EJDB2_SOURCE`.
 
 ###  Windows
 
@@ -37,17 +38,17 @@ pacman -S --needed base-devel git \
       mingw-w64-x86_64-cmake
 ```
 
-- config ENV
-need ENV variable `MSYS_HOME` to get it work.
+- configure ENV
+set ENV variable `MSYS_HOME` to make it work.
 ```
 MSYS_HOME=MSYS_INSTALL_FOLDER
 ```
 
 ---
 
-if you choose to use pre-build files , please config ENV variable `EJDB2_INSTALL_PATH`.  Nothing else to do, just go ahead to build your project.
+if you choose to use pre-build files , please configure ENV variable `EJDB2_INSTALL_PATH`.  Nothing else to do, just go ahead to build your project.
 
-If you choose to build from source, please config ENV `EJDB2_SOURCE`. Then build your project. Note: the build script will patch and modify`cmake/modules/AddIOWOW.cmake`, change `-DBUILD_SHARED_LIBS=OFF` to `-DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}`.
+If you choose to build from source, please configure ENV `EJDB2_SOURCE`. Then build your project. Note: the build script will patch and modify`cmake/modules/AddIOWOW.cmake`, change `-DBUILD_SHARED_LIBS=OFF` to `-DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}`.
 
 ### Static build & dynamic build
 
