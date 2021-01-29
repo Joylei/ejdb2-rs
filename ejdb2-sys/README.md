@@ -2,13 +2,13 @@
 ejdb2 rust binding
 
 
-## how to use
+## How to use
 ```toml
 [dependencies]
 ejdb2-sys={git="http://github.com/wowin/ejdb2-rs.git", path="ejdb2-rs-sys"}
 ```
 
-## how to build
+## How to build
 
 works on windows (requires msys2) & non-windows platform.
 
@@ -49,7 +49,8 @@ if you choose to use pre-build files , please config ENV variable `EJDB2_INSTALL
 
 If you choose to build from source, please config ENV `EJDB2_SOURCE`. Then build your project. Note: the build script will patch and modify`cmake/modules/AddIOWOW.cmake`, change `-DBUILD_SHARED_LIBS=OFF` to `-DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}`.
 
-### static build or dynamic build
+### Static build & dynamic build
+
 The build script will infer static build or dynamic build in the following orders:
  - ENV `EJDB2_STATIC`
  - ENV `EJDB2_DYNAMIC`
@@ -57,4 +58,5 @@ The build script will infer static build or dynamic build in the following order
 
 
 ## License
+
 MIT
