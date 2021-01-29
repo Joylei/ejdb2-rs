@@ -1,4 +1,4 @@
-use core::{convert::TryFrom, ptr, slice, str::FromStr};
+use core::{convert::TryFrom, fmt, ptr, slice, str::FromStr};
 
 use crate::{
     ffi,
@@ -19,7 +19,7 @@ pub struct JBL {
 
 impl JBL {
     /// create empty array
-    #[inline]
+    #[inline(always)]
     pub fn new_array() -> Result<Self> {
         let mut h: sys::JBL = ptr::null_mut();
         let rc = unsafe { sys::jbl_create_empty_array(&mut h) };
@@ -30,7 +30,7 @@ impl JBL {
         })
     }
     /// create empty object
-    #[inline]
+    #[inline(always)]
     pub fn new_object() -> Result<Self> {
         let mut h: sys::JBL = ptr::null_mut();
         let rc = unsafe { sys::jbl_create_empty_object(&mut h) };
@@ -399,6 +399,20 @@ impl AsJson<String> for JBL {
     }
 }
 
+impl fmt::Display for JBL {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s: XString = self.as_json(None).map_err(|_e| fmt::Error)?;
+        write!(f, "{}", s)
+    }
+}
+impl fmt::Debug for JBL {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "JBL{{json={}}}", self)
+    }
+}
+
 impl Drop for JBL {
     #[inline(always)]
     fn drop(&mut self) {
@@ -424,12 +438,14 @@ pub trait IntoJBLValue<'a> {
 macro_rules! impl_for_f64 {
     ($type:ident) => {
         impl<'a> IntoJBLValue<'a> for $type {
+            #[inline(always)]
             fn into_value(self) -> JBLValue<'a> {
                 JBLValue::Float(self as f64)
             }
         }
 
         impl<'a> IntoJBLValue<'a> for &$type {
+            #[inline(always)]
             fn into_value(self) -> JBLValue<'a> {
                 JBLValue::Float(*self as f64)
             }
@@ -440,12 +456,14 @@ macro_rules! impl_for_f64 {
 macro_rules! impl_for_i64 {
     ($type:ident) => {
         impl<'a> IntoJBLValue<'a> for $type {
+            #[inline(always)]
             fn into_value(self) -> JBLValue<'a> {
                 JBLValue::Integer(self as i64)
             }
         }
 
         impl<'a> IntoJBLValue<'a> for &$type {
+            #[inline(always)]
             fn into_value(self) -> JBLValue<'a> {
                 JBLValue::Integer(*self as i64)
             }
@@ -465,36 +483,42 @@ impl_for_i64!(u8);
 impl_for_i64!(usize);
 
 impl<'a> IntoJBLValue<'a> for bool {
+    #[inline(always)]
     fn into_value(self) -> JBLValue<'a> {
         JBLValue::Boolean(self)
     }
 }
 
 impl<'a> IntoJBLValue<'a> for &bool {
+    #[inline(always)]
     fn into_value(self) -> JBLValue<'a> {
         JBLValue::Boolean(*self)
     }
 }
 
 impl<'a> IntoJBLValue<'a> for JBL {
+    #[inline(always)]
     fn into_value(self) -> JBLValue<'a> {
         JBLValue::Nested(self)
     }
 }
 
 impl<'a> IntoJBLValue<'a> for JBLValue<'a> {
+    #[inline(always)]
     fn into_value(self) -> JBLValue<'a> {
         self
     }
 }
 
 impl<'a> IntoJBLValue<'a> for &'a str {
+    #[inline(always)]
     fn into_value(self) -> JBLValue<'a> {
         JBLValue::String(self.into())
     }
 }
 #[cfg(any(feature = "std", feature = "alloc"))]
 impl<'a> IntoJBLValue<'a> for String {
+    #[inline(always)]
     fn into_value(self) -> JBLValue<'a> {
         JBLValue::String(self.into())
     }
@@ -502,18 +526,21 @@ impl<'a> IntoJBLValue<'a> for String {
 
 #[cfg(any(feature = "std", feature = "alloc"))]
 impl<'a> IntoJBLValue<'a> for &'a String {
+    #[inline(always)]
     fn into_value(self) -> JBLValue<'a> {
         JBLValue::String(self.into())
     }
 }
 
 impl<'a> IntoJBLValue<'a> for XString {
+    #[inline(always)]
     fn into_value(self) -> JBLValue<'a> {
         JBLValue::String(self.into())
     }
 }
 
 impl<'a> IntoJBLValue<'a> for &'a XString {
+    #[inline(always)]
     fn into_value(self) -> JBLValue<'a> {
         JBLValue::String(self.into())
     }

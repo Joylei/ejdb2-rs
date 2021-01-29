@@ -68,7 +68,7 @@ impl JQL {
         Ok(res)
     }
 
-    #[inline]
+    #[inline(always)]
     pub fn skip(&self) -> Result<i64> {
         let mut num = 0;
         let rc = unsafe {
@@ -78,7 +78,7 @@ impl JQL {
         check_rc(rc).and(Ok(num))
     }
 
-    #[inline]
+    #[inline(always)]
     pub fn limit(&self) -> Result<i64> {
         let mut num = 0;
         let rc = unsafe {
@@ -182,7 +182,7 @@ impl JQL {
         check_rc(rc)
     }
 
-    #[inline]
+    #[inline(always)]
     pub fn reset(&self, reset_match_cache: bool, reset_placeholders: bool) -> &Self {
         unsafe { sys::jql_reset(self.raw_ptr(), reset_match_cache, reset_placeholders) };
         self
@@ -190,7 +190,7 @@ impl JQL {
 }
 
 impl Drop for JQL {
-    #[inline]
+    #[inline(always)]
     fn drop(&mut self) {
         unsafe { sys::jql_destroy(&mut self.handle) };
     }

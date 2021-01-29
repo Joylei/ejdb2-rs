@@ -101,7 +101,7 @@ fn link_libs(dst: &PathBuf, is_static: bool) -> Result<()> {
         println!("cargo:rustc-link-lib=libiowow");
 
         #[cfg(windows)]
-        install_dlls(&dst)?;
+        install_dlls(&dst).with_context(|| "failed to copy dlls")?;
     }
     Ok(())
 }
@@ -200,11 +200,11 @@ fn patch_headers(out_dir: &PathBuf) -> Result<()> {
     if !code.contains("<sys/types.h>") {
         let code_patched = code.replace(
             "#include <sys/time.h>",
-            r"#ifndef _WIN32
+            r#"#ifndef _WIN32
 #include <sys/time.h>
 #else
 #include <sys/types.h>
-#endif",
+#endif"#,
         );
         fs::write(iwp_file, code_patched)?;
     }

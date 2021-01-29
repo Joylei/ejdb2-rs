@@ -123,7 +123,8 @@ impl Database {
         let mut jblp = ptr::null_mut();
         let coll = collection.into();
         let rc = unsafe { sys::ejdb_get(self.raw_ptr(), coll.as_ptr(), id, &mut jblp) };
-        check_rc(rc).map(|_| JBL::from_ptr(jblp))
+        check_rc(rc)?;
+        Ok(JBL::from_ptr(jblp))
     }
 
     /// save document under specified id,
@@ -191,18 +192,15 @@ impl Database {
 
     /// return JSON document described database structure
     #[inline]
-    pub fn get_meta(&self, flag: Option<JsonPrintFlags>) -> Result<XString> {
-        let jbl = {
-            let mut jblp = ptr::null_mut();
-            let rc = unsafe { sys::ejdb_get_meta(self.raw_ptr(), &mut jblp) };
-            check_rc(rc)?;
-            JBL::from_ptr(jblp)
-        };
-        jbl.as_json(flag)
+    pub fn get_meta(&self) -> Result<JBL> {
+        let mut jblp = ptr::null_mut();
+        let rc = unsafe { sys::ejdb_get_meta(self.raw_ptr(), &mut jblp) };
+        check_rc(rc)?;
+        Ok(JBL::from_ptr(jblp))
     }
 
     #[inline]
-    pub fn collection<'a, 'b>(&'a self, name: impl Into<StringPtr<'b>>) -> Collection<'a> {
+    pub fn collection<'db, 'a>(&'db self, name: impl Into<StringPtr<'a>>) -> Collection<'db> {
         Collection::new(self, name)
     }
     #[inline]
@@ -222,21 +220,21 @@ impl Database {
 }
 
 impl Drop for Database {
-    #[inline]
+    #[inline(always)]
     fn drop(&mut self) {
         let rc = unsafe { sys::ejdb_close(&mut self.ptr) };
         debug_assert!(rc == 0);
     }
 }
 
-pub struct Collection<'c> {
-    db: &'c Database,
+pub struct Collection<'db> {
+    db: &'db Database,
     name: XString,
 }
 
-impl<'c> Collection<'c> {
+impl<'db> Collection<'db> {
     #[inline]
-    pub(crate) fn new<'a>(db: &'c Database, name: impl Into<StringPtr<'a>>) -> Self {
+    pub(crate) fn new<'a>(db: &'db Database, name: impl Into<StringPtr<'a>>) -> Self {
         Self {
             db,
             name: name.into().to_owned(),
@@ -285,7 +283,7 @@ impl<'c> Collection<'c> {
 
     /// remove collection
     #[inline]
-    pub fn remove(self) -> core::result::Result<(), CollectionRemoveError<'c>> {
+    pub fn remove(self) -> core::result::Result<(), CollectionRemoveError<'db>> {
         let res = self.db.remove_collection(self.name());
         res.map_err(|e| CollectionRemoveError {
             collection: self,

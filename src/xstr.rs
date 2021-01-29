@@ -16,7 +16,6 @@ use alloc::string::String;
 use std::ffi::{CStr, CString};
 
 /// iwxstr
-#[derive(Debug)]
 pub struct XString {
     ptr: *mut sys::IWXSTR,
 }
@@ -133,7 +132,7 @@ impl XString {
         Vec::from(bytes)
     }
 
-    #[inline]
+    #[inline(always)]
     pub fn to_bytes(&self) -> &[u8] {
         unsafe {
             let ptr = sys::iwxstr_ptr(self.as_mut_ptr());
@@ -143,7 +142,7 @@ impl XString {
         }
     }
 
-    #[inline]
+    #[inline(always)]
     pub fn to_bytes_mut(&self) -> &mut [u8] {
         unsafe {
             let ptr = sys::iwxstr_ptr(self.as_mut_ptr());
@@ -153,13 +152,13 @@ impl XString {
         }
     }
 
-    #[inline]
+    #[inline(always)]
     pub fn as_str(&self) -> &str {
         let bytes = self.to_bytes();
         unsafe { core::str::from_utf8_unchecked(bytes) }
     }
 
-    #[inline]
+    #[inline(always)]
     pub fn as_str_mut(&mut self) -> &mut str {
         let bytes = self.to_bytes_mut();
         unsafe { core::str::from_utf8_unchecked_mut(bytes) }
@@ -167,7 +166,7 @@ impl XString {
 }
 
 impl Default for XString {
-    #[inline]
+    #[inline(always)]
     fn default() -> Self {
         Self::new()
     }
@@ -176,8 +175,14 @@ impl Default for XString {
 impl fmt::Display for XString {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let s = unsafe { core::str::from_utf8_unchecked(self.to_bytes()) };
-        write!(f, "{}", s)
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl fmt::Debug for XString {
+    #[inline]
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "XString{{\"{}\"}}", self.as_str())
     }
 }
 
@@ -197,7 +202,7 @@ impl std::io::Write for XString {
             .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?;
         Ok(buf.len())
     }
-    #[inline]
+    #[inline(always)]
     fn flush(&mut self) -> std::io::Result<()> {
         Ok(())
     }
@@ -217,7 +222,7 @@ impl std::io::Read for XString {
 }
 #[cfg(feature = "std")]
 impl AsRef<std::ffi::CStr> for XString {
-    #[inline]
+    #[inline(always)]
     fn as_ref(&self) -> &std::ffi::CStr {
         unsafe {
             let ptr = sys::iwxstr_ptr(self.as_mut_ptr());
@@ -227,7 +232,7 @@ impl AsRef<std::ffi::CStr> for XString {
 }
 
 impl AsRef<str> for XString {
-    #[inline]
+    #[inline(always)]
     fn as_ref(&self) -> &str {
         self.as_str()
     }
@@ -235,21 +240,21 @@ impl AsRef<str> for XString {
 
 impl Deref for XString {
     type Target = str;
-    #[inline]
+    #[inline(always)]
     fn deref(&self) -> &Self::Target {
         self.as_str()
     }
 }
 
 impl DerefMut for XString {
-    #[inline]
+    #[inline(always)]
     fn deref_mut(&mut self) -> &mut Self::Target {
         self.as_str_mut()
     }
 }
 
 impl AsRef<[c_char]> for XString {
-    #[inline]
+    #[inline(always)]
     fn as_ref(&self) -> &[c_char] {
         unsafe {
             let ptr = sys::iwxstr_ptr(self.as_mut_ptr());
@@ -261,7 +266,7 @@ impl AsRef<[c_char]> for XString {
 }
 
 impl AsRef<[u8]> for XString {
-    #[inline]
+    #[inline(always)]
     fn as_ref(&self) -> &[u8] {
         self.to_bytes()
     }

@@ -5,6 +5,7 @@ pub use core::ffi::c_void;
 pub use libc::c_char;
 pub use libc::strlen;
 
+#[inline(always)]
 pub fn ejdb_version() -> (u32, u32, u32) {
     unsafe {
         (
