@@ -19,13 +19,14 @@ EJDB2_SOURCE=EJDB2_SOURCE_CODE
 ```
 
 if ENV `EJDB2_INSTALL_PATH` was specified, will build with pre-build ejdb2 binaries.
+
 if ENV `EJDB2_SOURCE` was specified, will build ejdb2 from source.
 
-### Non-Windows
+### Build for Non-Windows platform
 To build the library, you need to have cmake installed along with gcc and clang.
 And specify one of two ENV variables: `EJDB2_INSTALL_PATH`  and `EJDB2_SOURCE`.
 
-###  Windows
+###  Windows platform
 
 steps:
 - install msys2&mingw64
@@ -44,9 +45,7 @@ set ENV variable `MSYS_HOME` to make it work.
 MSYS_HOME=MSYS_INSTALL_FOLDER
 ```
 
----
-
-if you choose to use pre-build files , please configure ENV variable `EJDB2_INSTALL_PATH`.  Nothing else to do, just go ahead to build your project.
+And specify one of two ENV variables: `EJDB2_INSTALL_PATH`  and `EJDB2_SOURCE`.
 
 If you choose to build from source, please configure ENV `EJDB2_SOURCE`. Then build your project. Note: the build script will patch and modify`cmake/modules/AddIOWOW.cmake`, change `-DBUILD_SHARED_LIBS=OFF` to `-DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}`.
 
