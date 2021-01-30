@@ -1,6 +1,6 @@
 # ejdb2-rs
 
-EJDB2 rust binding
+[EJDB2](https://github.com/Softmotions/ejdb) rust binding
 
 ## Usage
 
