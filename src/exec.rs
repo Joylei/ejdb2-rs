@@ -1,3 +1,4 @@
+use core::marker::PhantomData;
 use core::ops::{Deref, DerefMut};
 use core::{cell::UnsafeCell, ffi::c_void, mem};
 
@@ -81,10 +82,10 @@ impl<'a> Query<'a> {
         check_rc(rc).map(|_| if count < 0 { 0 } else { count as usize })
     }
 
-    /// exec query and return if any matched doc
+    /// exec query and return true if any matched doc
     #[inline]
     pub fn any(&self) -> Result<bool> {
-        self.count().map(|c| c > 0)
+        self.first(|_| Ok(())).map(|v| v.is_some())
     }
 
     /// exec query and return first matched doc
