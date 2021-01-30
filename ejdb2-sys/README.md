@@ -30,9 +30,11 @@ And specify one of two ENV variables: `EJDB2_INSTALL_PATH`  and `EJDB2_SOURCE`.
 
 steps:
 - install msys2&mingw64
+
 please refer to official document for how to get it work.
 
 - install toolchain for msys2
+
 ```sh
 pacman -S --needed base-devel git \
       mingw-w64-x86_64-toolchain \
@@ -40,6 +42,7 @@ pacman -S --needed base-devel git \
 ```
 
 - configure ENV
+
 set ENV variable `MSYS_HOME` to make it work.
 ```
 MSYS_HOME=MSYS_INSTALL_FOLDER
